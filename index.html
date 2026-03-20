@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SLTHL - Luxury Vape Collection</title>
+    <title>STLTH - Luxury Vape Collection</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -14,24 +14,56 @@
         }
         header {
             background: linear-gradient(180deg, #000000 0%, #1a1a1a 100%);
-            padding: 2rem;
-            text-align: center;
+            padding: 1.5rem 2rem;
             border-bottom: 2px solid #d4af37;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        h1 {
-            font-size: 2.5rem;
+        .logo {
+            font-size: 1.8rem;
             background: linear-gradient(135deg, #d4af37 0%, #f4e5c2 50%, #d4af37 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        .cart-icon {
+            background: linear-gradient(135deg, #ffd700, #daa520);
+            color: #000;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: 2px solid #d4af37;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+        .cart-icon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.5);
+        }
+        .cart-count {
+            background: #000;
+            color: #ffd700;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
         }
         nav {
             background: #000;
             padding: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
             border-bottom: 1px solid #333;
         }
         nav ul {
@@ -48,18 +80,13 @@
             transition: all 0.15s ease;
             padding: 0.5rem 1rem;
             border: 1px solid transparent;
-            cursor: pointer;
         }
         nav a:hover {
             color: #fff;
             border: 1px solid #d4af37;
             transform: scale(1.05);
         }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
         .back-btn {
             display: inline-flex;
             align-items: center;
@@ -78,10 +105,12 @@
             color: #000;
             transform: translateX(-5px);
         }
+        
+        /* LAYOUT PRINCIPAL - DOS COLUMNAS */
         .product-detail {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
+            grid-template-columns: 1.2fr 1.3fr;
+            gap: 3rem;
             background: linear-gradient(145deg, #1a1a1a 0%, #0d0d0d 100%);
             border: 1px solid #333;
             border-radius: 30px;
@@ -91,23 +120,24 @@
         .product-image-large {
             background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
             border-radius: 20px;
-            padding: 1rem;
+            padding: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #333;
-            height: 600px;
+            border: 2px solid #333;
+            min-height: 500px;
         }
         .product-image-large img {
             width: 100%;
-            height: 100%;
+            max-width: 350px;
+            height: auto;
             object-fit: contain;
             filter: drop-shadow(0 20px 40px rgba(212, 175, 55, 0.3));
         }
-        .product-info h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #fff;
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
         .product-badge {
             display: inline-block;
@@ -116,32 +146,98 @@
             padding: 0.5rem 1.5rem;
             border-radius: 25px;
             font-weight: bold;
-            margin-bottom: 2rem;
+            width: fit-content;
         }
-        .price {
-            font-size: 3rem;
-            color: #d4af37;
-            font-weight: bold;
-            margin: 2rem 0;
+        .product-info h2 { 
+            font-size: 2.2rem; 
+            color: #fff;
         }
-        .description {
-            color: #888;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-        .specs-section {
-            margin: 2rem 0;
-        }
-        .specs-section h3 {
-            color: #d4af37;
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
-        }
-        .specs-grid {
+        
+        /* SELECTOR DE CARTUCHO */
+        .cartridge-selector {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
+            margin: 1rem 0;
+        }
+        .cartridge-option {
+            padding: 1rem;
+            border: 2px solid #444;
+            border-radius: 12px;
+            background: #1a1a1a;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .cartridge-option:hover {
+            border-color: #d4af37;
+            transform: translateY(-2px);
+        }
+        .cartridge-option.selected {
+            border-color: #d4af37;
+            background: rgba(212, 175, 55, 0.15);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+        .cartridge-option .name {
+            font-weight: bold;
+            color: #fff;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+        .cartridge-option .puffs {
+            color: #00ff88;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .cartridge-option .price {
+            color: #d4af37;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            font-weight: 600;
+        }
+        
+        /* PRECIO DINÁMICO */
+        .price-container {
+            background: rgba(212, 175, 55, 0.1);
+            border: 2px solid #d4af37;
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .price { 
+            font-size: 2.8rem; 
+            color: #d4af37; 
+            font-weight: bold;
+        }
+        .price-breakdown {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 0.5rem;
+        }
+        .price-breakdown span {
+            color: #00ff88;
+            font-weight: 600;
+        }
+        
+        .description { 
+            color: #888; 
+            font-size: 1rem; 
+            line-height: 1.7;
+        }
+        
+        /* ESPECIFICACIONES */
+        .specs-section { 
+            margin: 1.5rem 0;
+        }
+        .specs-section h3 { 
+            color: #d4af37; 
+            margin-bottom: 1rem; 
+            font-size: 1.2rem;
+        }
+        .specs-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 1rem; 
         }
         .spec-item {
             background: rgba(212, 175, 55, 0.1);
@@ -149,40 +245,88 @@
             padding: 1rem;
             border-radius: 10px;
         }
-        .spec-label {
-            color: #888;
-            font-size: 0.85rem;
-            margin-bottom: 0.3rem;
+        .spec-label { color: #888; font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .spec-value { color: #fff; font-weight: 600; font-size: 1.1rem; }
+        
+        /* DISPLAY DE SABORES SELECCIONADOS */
+        .selected-flavors-display {
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 204, 106, 0.05));
+            border: 2px solid #00ff88;
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: none;
         }
-        .spec-value {
-            color: #fff;
-            font-weight: 600;
+        .selected-flavors-display.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .selected-flavors-display h4 {
+            color: #00ff88;
+            margin-bottom: 1rem;
             font-size: 1.1rem;
-        }
-        .action-buttons {
             display: flex;
-            gap: 1rem;
-            margin-top: 3rem;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .selected-flavors-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .selected-flavor-tag {
+            background: linear-gradient(135deg, #00ff88, #00cc6a);
+            color: #000;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .selected-flavor-tag .remove {
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0 0.2rem;
+        }
+        .flavor-price-info {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 255, 136, 0.3);
+            color: #00ff88;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        /* BOTONES DE ACCIÓN */
+        .action-buttons { 
+            display: flex; 
+            gap: 1rem; 
+            margin-top: 1rem;
         }
         .btn {
             flex: 1;
-            padding: 1.5rem;
+            padding: 1.3rem;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            font-size: 1rem;
+            letter-spacing: 1px;
+            font-size: 0.95rem;
         }
         .btn-primary {
             background: linear-gradient(135deg, #00ff88, #00cc6a);
             color: #000;
         }
         .btn-primary:hover {
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
-            transform: translateY(-3px);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.6);
+            transform: translateY(-2px);
         }
         .btn-secondary {
             background: transparent;
@@ -192,8 +336,220 @@
         .btn-secondary:hover {
             background: #d4af37;
             color: #000;
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
         }
+        
+        /* FLAVORS SECTION - AL FINAL */
+        .flavors-section {
+            grid-column: 1 / -1;
+            background: rgba(212, 175, 55, 0.05);
+            border: 2px solid #333;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+        .flavors-section h3 {
+            color: #d4af37;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .flavors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(85px, 1fr));
+            gap: 12px;
+            max-height: 450px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .flavors-grid::-webkit-scrollbar {
+            width: 8px;
+        }
+        .flavors-grid::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 4px;
+        }
+        .flavors-grid::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 4px;
+        }
+        .flavor-item {
+            position: relative;
+            cursor: pointer;
+            border: 2px solid #444;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            background: #1a1a1a;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .flavor-item:hover {
+            transform: translateY(-3px) scale(1.05);
+            border-color: #d4af37;
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+            z-index: 10;
+        }
+        .flavor-item.selected {
+            border-color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+            transform: scale(1.05);
+        }
+        .flavor-item img {
+            width: 100%;
+            height: 65%;
+            object-fit: cover;
+            display: block;
+            background: #0a0a0a;
+        }
+        .flavor-item .flavor-name {
+            padding: 4px 2px;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: linear-gradient(180deg, #1a1a1a 0%, #0a0a0a 100%);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+        .flavor-item .checkmark {
+            position: absolute;
+            top: 3px;
+            right: 3px;
+            background: #00ff88;
+            color: #000;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            z-index: 5;
+        }
+        .flavor-item.selected .checkmark {
+            display: flex;
+        }
+        .selected-count {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 204, 106, 0.1));
+            border: 2px solid #00ff88;
+            border-radius: 10px;
+            text-align: center;
+            color: #00ff88;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        /* CART MODAL */
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .cart-modal.active {
+            display: flex;
+        }
+        .cart-content {
+            background: linear-gradient(145deg, #1a1a1a, #0d0d0d);
+            border: 2px solid #d4af37;
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #333;
+        }
+        .cart-header h2 {
+            color: #d4af37;
+            font-size: 1.8rem;
+        }
+        .close-cart {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close-cart:hover {
+            color: #d4af37;
+        }
+        .cart-item {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        .cart-item-name {
+            color: #fff;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .cart-item-flavors {
+            color: #888;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+        .cart-item-price {
+            color: #d4af37;
+            font-weight: bold;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+        .cart-item-breakdown {
+            color: #00ff88;
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+        }
+        .cart-total {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 2px solid #d4af37;
+            text-align: right;
+            font-size: 1.5rem;
+            color: #d4af37;
+            font-weight: bold;
+        }
+        .cart-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        .empty-cart {
+            text-align: center;
+            color: #666;
+            padding: 3rem;
+            font-size: 1.1rem;
+        }
+        
         footer {
             background: #000;
             border-top: 2px solid #d4af37;
@@ -201,31 +557,53 @@
             text-align: center;
             margin-top: 4rem;
         }
-        .footer-text {
-            color: #666;
-        }
-        @media (max-width: 768px) {
+        .footer-text { color: #666; }
+        
+        /* RESPONSIVE - MÓVIL */
+        @media (max-width: 968px) {
             .product-detail {
                 grid-template-columns: 1fr;
                 gap: 2rem;
                 padding: 2rem;
             }
-            .product-image-large {
-                height: 400px;
+            .product-image-large { min-height: 350px; }
+            .product-info h2 { font-size: 1.8rem; }
+            .price { font-size: 2.2rem; }
+            .cartridge-selector { grid-template-columns: 1fr; }
+            .flavors-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
             }
-            .product-info h2 { font-size: 2rem; }
-            .price { font-size: 2.5rem; }
+            .logo { font-size: 1.5rem; }
+            .cart-icon {
+                width: 100%;
+                justify-content: center;
+            }
+            nav ul { gap: 1rem; }
+            nav a { padding: 0.4rem 0.8rem; font-size: 0.85rem; }
+            .container { padding: 2rem 1rem; }
+            .product-image-large { min-height: 300px; }
+            .flavors-grid { grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 8px; }
             .specs-grid { grid-template-columns: 1fr; }
             .action-buttons { flex-direction: column; }
-            nav ul { gap: 1rem; }
-            nav a { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+            .flavor-item .flavor-name { font-size: 0.65rem; }
         }
     </style>
 </head>
 <body>
-    <header><h1>✨ Luxury Vape Collection</h1></header>
+    <header>
+        <div class="logo">✨ Luxury Vape</div>
+        <div class="cart-icon" onclick="toggleCart()">
+            <span>🛒 Carrito</span>
+            <span class="cart-count" id="cartCount">0</span>
+        </div>
+    </header>
     
-    <!-- ✅ MENÚ ACTUALIZADO CON URLS EXTERNAS COMPLETAS -->
     <nav>
         <ul>
             <li><a href="https://modulescene.github.io/Luxury-Smok/">Inicio</a></li>
@@ -236,27 +614,63 @@
             <li><a href="https://modulescene.github.io/Luxury-NastyJuice/">Nasty PX15K</a></li>
             <li><a href="https://modulescene.github.io/Luxury-Oxbar/">OXBAR</a></li>
             <li><a href="https://modulescene.github.io/Luxury-Voopo/">VOPOO</a></li>
-            <li><a href="https://modulescene.github.io/Luxury-STLTH/">STLH</a></li>
+            <li><a href="https://modulescene.github.io/Luxury-STLTH/">STLTH</a></li>
         </ul>
     </nav>
     
     <div class="container">
-        <!-- ✅ BOTÓN VOLVER ACTUALIZADO -->
         <a href="https://modulescene.github.io/Luxury-Smok/" class="back-btn">← Volver a la Tienda</a>
         
         <div class="product-detail">
+            <!-- COLUMNA IZQUIERDA: Imagen -->
             <div class="product-image-large">
-                <img src="https://i.postimg.cc/13qLBvXq/Chat-GPT-Image-17-mar-2026-03-59-57-a-m.png" alt="SLTHL">
+                <img src="https://i.postimg.cc/13qLBvXq/Chat-GPT-Image-17-mar-2026-03-59-57-a-m.png" alt="STLTH">
             </div>
+            
+            <!-- COLUMNA DERECHA: Información -->
             <div class="product-info">
                 <span class="product-badge">PREMIUM</span>
-                <h2>SLTHL</h2>
-                <div class="price">s/.67.99</div>
-                <p class="description">Diseño minimalista y elegante con rendimiento superior. SLTHL combina portabilidad con potencia en un dispositivo ultra-delgado.</p>
+                <h2>STLTH</h2>
+                
+                <!-- SELECTOR DE CARTUCHO -->
+                <div class="cartridge-selector">
+                    <div class="cartridge-option selected" onclick="selectCartridge('5k')" id="cartridge-5k">
+                        <div class="name">5K Puffs</div>
+                        <div class="puffs">~5,000 Puffs</div>
+                        <div class="price">S/.66.99</div>
+                    </div>
+                    <div class="cartridge-option" onclick="selectCartridge('9k')" id="cartridge-9k">
+                        <div class="name">9K Puffs</div>
+                        <div class="puffs">~9,000 Puffs</div>
+                        <div class="price">S/.104.99</div>
+                    </div>
+                    <div class="cartridge-option" onclick="selectCartridge('12k')" id="cartridge-12k">
+                        <div class="name">12K Puffs</div>
+                        <div class="puffs">~12,000 Puffs</div>
+                        <div class="price">S/.110.00</div>
+                    </div>
+                    <div class="cartridge-option" onclick="selectCartridge('15k')" id="cartridge-15k">
+                        <div class="name">15K Puffs</div>
+                        <div class="puffs">~15,000 Puffs</div>
+                        <div class="price">S/.150.00</div>
+                    </div>
+                </div>
+                
+                <!-- PRECIO DINÁMICO -->
+                <div class="price-container">
+                    <div class="price" id="dynamicPrice">S/.66.99</div>
+                    <div class="price-breakdown" id="priceBreakdown">
+                        Precio base (incluye 1 sabor) <span id="flavorsCost"></span>
+                    </div>
+                </div>
+                
+                <p class="description" id="descriptionText">Diseño minimalista y elegante con rendimiento superior. STLTH combina portabilidad con potencia en un dispositivo ultra-delgado. <strong>El precio incluye 1 sabor. Cada sabor adicional cuesta S/.35.00</strong>.</p>
+                
+                <!-- Especificaciones -->
                 <div class="specs-section">
                     <h3>Especificaciones Técnicas</h3>
                     <div class="specs-grid">
-                        <div class="spec-item"><div class="spec-label">Diseño</div><div class="spec-value"> Portable</div></div>
+                        <div class="spec-item"><div class="spec-label">Diseño</div><div class="spec-value">Portable</div></div>
                         <div class="spec-item"><div class="spec-label">Batería</div><div class="spec-value">650mAh</div></div>
                         <div class="spec-item"><div class="spec-label">Pods</div><div class="spec-value">10ml</div></div>
                         <div class="spec-item"><div class="spec-label">Resistencia</div><div class="spec-value">0.5Ω</div></div>
@@ -264,10 +678,46 @@
                         <div class="spec-item"><div class="spec-label">Material</div><div class="spec-value">Polímero Premium</div></div>
                     </div>
                 </div>
-                <div class="action-buttons">
-                    <button class="btn btn-primary">Añadir al Carrito</button>
-                    <button class="btn btn-secondary">Consultar WhatsApp</button>
+                
+                <!-- DISPLAY DE SABORES SELECCIONADOS -->
+                <div class="selected-flavors-display" id="selectedFlavorsDisplay">
+                    <h4>✅ Sabores Seleccionados:</h4>
+                    <div class="selected-flavors-list" id="selectedFlavorsList"></div>
+                    <div class="flavor-price-info" id="flavorPriceInfo">
+                        + S/.0.00 por sabores adicionales
+                    </div>
                 </div>
+                
+                <!-- BOTONES DE ACCIÓN -->
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="addToCart()">AÑADIR AL CARRITO</button>
+                    <button class="btn btn-secondary" onclick="consultWhatsApp()">CONSULTAR WHATSAPP</button>
+                </div>
+            </div>
+            
+            <!-- FLAVORS SECTION - AL FINAL (OCUPA AMBAS COLUMNAS) -->
+            <div class="flavors-section">
+                <h3 id="flavorsTitle">🎨 Sabores 5K (1 incluido + S/.35 c/u adicional)</h3>
+                <div class="flavors-grid" id="flavorsGrid"></div>
+                <div class="selected-count" id="selectedCount">Sabores seleccionados: 0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CART MODAL -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>🛒 Tu Carrito</h2>
+                <button class="close-cart" onclick="toggleCart()">&times;</button>
+            </div>
+            <div id="cartItems">
+                <div class="empty-cart">Tu carrito está vacío</div>
+            </div>
+            <div class="cart-total" id="cartTotal" style="display: none;">Total: S/.0.00</div>
+            <div class="cart-actions" id="cartActions" style="display: none;">
+                <button class="btn btn-secondary" onclick="checkoutWhatsApp()">Pedir por WhatsApp</button>
+                <button class="btn btn-primary" onclick="clearCart()">Vaciar Carrito</button>
             </div>
         </div>
     </div>
@@ -278,12 +728,363 @@
     </footer>
     
     <script>
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                this.style.transform = 'scale(0.95)';
-                setTimeout(() => { this.style.transform = ''; }, 150);
+        // SABORES 5K
+        const flavors5k = [
+            { name: "Island Splash Ice", image: "https://i.postimg.cc/V6z3sdc8/Captura-de-pantalla-2026-03-02-145413.jpg" },
+            { name: "Prism Ice", image: "https://i.postimg.cc/6qrRJDSs/prsio.jpg" },
+            { name: "Nana Berry Ice", image: "https://i.postimg.cc/qR7jZnTZ/44234.jpg" },
+            { name: "Hawaiian Ice", image: "https://i.postimg.cc/xTXB1wBN/as.jpg" },
+            { name: "Green Burst", image: "https://i.postimg.cc/g01md1y3/Captura-de-pantalla-2026-03-02-205347.jpg" },
+            { name: "Straw Kiwi Ice", image: "https://i.postimg.cc/L526pHx3/123123.jpg" },
+            { name: "Blue Cherry Ice", image: "https://i.postimg.cc/rwmk4qQK/1.jpg" },
+            { name: "Misty Mango Ice", image: "https://i.postimg.cc/Cx300h1q/asd123.jpg" },
+            { name: "White Grape Ice", image: "https://i.postimg.cc/dV8CvX0z/Captura-de-pantalla-2026-03-02-144342.jpg" },
+            { name: "Dragon Berry Mango Ice", image: "https://i.postimg.cc/bJRCLtw5/Captura-de-pantalla-2026-03-02-205948.jpg" },
+            { name: "Green Apple Ice", image: "https://i.postimg.cc/W41G2vfC/Captura-de-pantalla-2026-03-02-144648.jpg" },
+            { name: "Juicy Peach Ice", image: "https://i.postimg.cc/JzBpvghD/Captura-de-pantalla-2026-03-02-210110.jpg" },
+            { name: "Lemon Blue Razz Ice", image: "https://i.postimg.cc/g2qMq7k1/asd123123.jpg" },
+            { name: "Mint Punch Ice", image: "https://i.postimg.cc/SRsrr15s/Captura-de-pantalla-2026-03-02-210209.jpg" },
+            { name: "Apple Kiwi Melon", image: "https://i.postimg.cc/ZnS05P5d/Captura-de-pantalla-2026-03-02-144928.jpg" },
+            { name: "Strawberry Kiwi Ice", image: "https://i.postimg.cc/GhbTTgVY/Captura-de-pantalla-2026-03-02-211255.jpg" },
+            { name: "Mango Ice", image: "https://i.postimg.cc/sDGPgWRF/as123.jpg" },
+            { name: "Strawberry Banana Pineapple Ice", image: "https://i.postimg.cc/Xv5Yz9tV/pinas1.jpg" },
+            { name: "Mint Ice", image: "https://i.postimg.cc/g2bPM1yL/123sdfg.jpg" }
+        ];
+
+        // SABORES 9K
+        const flavors9k = [
+            { name: "White Grape Ice", image: "https://i.postimg.cc/N0kWFMHt/dfbn234.jpg" },
+            { name: "Blue Lemons", image: "https://i.postimg.cc/zGnQ2Bps/hg.png" },
+            { name: "Pineapple Orange", image: "https://i.postimg.cc/PrdKf4M4/g2134.png" },
+            { name: "Tropical Storm Ice", image: "https://i.postimg.cc/d331ngYG/tropical.png" },
+            { name: "Hawaiian Mist Ice", image: "https://i.postimg.cc/d1vZRW3d/jmnaa.png" },
+            { name: "White Grape", image: "https://i.postimg.cc/SND0mjc9/443f.png" },
+            { name: "Honeydew Mango Ice", image: "https://i.postimg.cc/4xqS3cyn/1.png" }
+        ];
+
+        // SABORES 12K
+        const flavors12k = [
+            { name: "Hawaiian Mist Ice", image: "https://i.postimg.cc/rpGNLRtN/fsddf.png" },
+            { name: "Strawberry Lime Ice", image: "https://i.postimg.cc/PqmJ3m8Z/GSDG12.png" },
+            { name: "Coconut Razz Ice", image: "https://i.postimg.cc/8CBkBNqT/31231.png" }
+        ];
+
+        // SABORES 15K
+        const flavors15k = [
+            { name: "Watermelon Lime & Strawberry Lime Ice", image: "https://i.postimg.cc/P5KTP2Z3/vv123.jpg" },
+            { name: "Classic Ice & Dry Ice", image: "https://i.postimg.cc/fbJnkZMD/Captura-de-pantalla-2026-03-02-221840.jpg" },
+            { name: "Strawberry Kiwi Ice & Mango Ice", image: "https://i.postimg.cc/9FpvpzM3/v123123.jpg" },
+            { name: "Peppermint & Spearmint", image: "https://i.postimg.cc/BnbwBgkg/Captura-de-pantalla-2026-03-02-222108.jpg" },
+            { name: "Green Apple Ice & White Grape Ice", image: "https://i.postimg.cc/K85vtZXY/b123.jpg" }
+        ];
+
+        let selectedFlavors = [];
+        let cart = [];
+        let selectedCartridge = '5k';
+        
+        // PRECIOS POR CARTUCHO: base (1 sabor incluido) y adicional
+        const PRICING = { 
+            '5k': { base: 66.99, additional: 35.00, label: '5K' }, 
+            '9k': { base: 104.99, additional: 55.00, label: '9K' }, 
+            '12k': { base: 110.00, additional: 60.00, label: '12K' }, 
+            '15k': { base: 150.00, additional: 70.00, label: '15K' } 
+        };
+        
+        const PUFFS = { '5k': '5,000', '9k': '9,000', '12k': '12,000', '15k': '15,000' };
+
+        // SELECCIONAR CARTUCHO
+        function selectCartridge(type) {
+            selectedCartridge = type;
+            const pricing = PRICING[type];
+            
+            // Actualizar UI del selector
+            ['5k','9k','12k','15k'].forEach(k => {
+                document.getElementById(`cartridge-${k}`).classList.toggle('selected', k === type);
             });
+            
+            // Actualizar título de sabores y descripción
+            document.getElementById('flavorsTitle').textContent = 
+                `🎨 Sabores ${pricing.label} (1 incluido + S/.${pricing.additional.toFixed(2)} c/u adicional)`;
+            
+            document.getElementById('descriptionText').innerHTML = 
+                `Diseño minimalista y elegante con rendimiento superior. STLTH combina portabilidad con potencia en un dispositivo ultra-delgado. <strong>El precio incluye 1 sabor. Cada sabor adicional cuesta S/.${pricing.additional.toFixed(2)}</strong>.`;
+            
+            // Resetear selección de sabores
+            selectedFlavors = [];
+            document.querySelectorAll('.flavor-item').forEach(item => item.classList.remove('selected'));
+            
+            // Renderizar nuevos sabores
+            renderFlavors();
+            updateSelectedCount();
+            updateSelectedFlavorsDisplay();
+            updatePriceDisplay();
+        }
+
+        // CALCULAR PRECIO TOTAL
+        function calculateTotal() {
+            const pricing = PRICING[selectedCartridge];
+            const additionalFlavors = Math.max(0, selectedFlavors.length - 1);
+            return pricing.base + (additionalFlavors * pricing.additional);
+        }
+
+        // ACTUALIZAR PRECIO EN PANTALLA
+        function updatePriceDisplay() {
+            const total = calculateTotal();
+            const pricing = PRICING[selectedCartridge];
+            const additionalFlavors = Math.max(0, selectedFlavors.length - 1);
+            const additionalCost = additionalFlavors * pricing.additional;
+            
+            document.getElementById('dynamicPrice').textContent = `S/.${total.toFixed(2)}`;
+            
+            if (additionalFlavors > 0) {
+                document.getElementById('flavorsCost').textContent = 
+                    `+ ${additionalFlavors} sabor(es) adicional(es): S/.${additionalCost.toFixed(2)}`;
+            } else {
+                document.getElementById('flavorsCost').textContent = '';
+            }
+            
+            const flavorPriceInfo = document.getElementById('flavorPriceInfo');
+            if (additionalFlavors > 0) {
+                flavorPriceInfo.textContent = `+ S/.${additionalCost.toFixed(2)} por ${additionalFlavors} sabor(es) adicional(es)`;
+                flavorPriceInfo.style.display = 'block';
+            } else {
+                flavorPriceInfo.style.display = 'none';
+            }
+        }
+
+        // RENDER FLAVORS
+        function renderFlavors() {
+            const flavors = { '5k': flavors5k, '9k': flavors9k, '12k': flavors12k, '15k': flavors15k }[selectedCartridge];
+            const grid = document.getElementById('flavorsGrid');
+            grid.innerHTML = flavors.map((flavor, index) => `
+                <div class="flavor-item" onclick="toggleFlavor(${index})" id="flavor-${index}" title="${flavor.name}">
+                    <img src="${flavor.image.trim()}" alt="${flavor.name}" onerror="this.src='image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2780%27 height=%2780%27%3E%3Crect fill=%27%23333%27 width=%2780%27 height=%2780%27/%3E%3Ctext fill=%27%23d4af37%27 font-family=%27Arial%27 font-size=%2710%27 x=%2750%25%27 y=%2750%25%27 text-anchor=%27middle%27 dy=%27.3em%27%3ENo Image%3C/text%3E%3C/svg%3E'">
+                    <div class="flavor-name">${flavor.name}</div>
+                    <div class="checkmark">✓</div>
+                </div>
+            `).join('');
+        }
+
+        // TOGGLE FLAVOR SELECTION
+        function toggleFlavor(index) {
+            const flavors = { '5k': flavors5k, '9k': flavors9k, '12k': flavors12k, '15k': flavors15k }[selectedCartridge];
+            const flavorName = flavors[index].name;
+            const flavorElement = document.getElementById(`flavor-${index}`);
+            
+            if (selectedFlavors.includes(flavorName)) {
+                selectedFlavors = selectedFlavors.filter(f => f !== flavorName);
+                flavorElement.classList.remove('selected');
+            } else {
+                selectedFlavors.push(flavorName);
+                flavorElement.classList.add('selected');
+            }
+            
+            updateSelectedCount();
+            updateSelectedFlavorsDisplay();
+            updatePriceDisplay();
+        }
+
+        // UPDATE SELECTED COUNT
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = `Sabores seleccionados: ${selectedFlavors.length}`;
+        }
+
+        // UPDATE SELECTED FLAVORS DISPLAY
+        function updateSelectedFlavorsDisplay() {
+            const display = document.getElementById('selectedFlavorsDisplay');
+            const list = document.getElementById('selectedFlavorsList');
+            
+            if (selectedFlavors.length === 0) {
+                display.classList.remove('active');
+                return;
+            }
+            
+            display.classList.add('active');
+            list.innerHTML = selectedFlavors.map(flavor => `
+                <div class="selected-flavor-tag">
+                    ${flavor}
+                    <span class="remove" onclick="removeFlavor('${flavor}')">×</span>
+                </div>
+            `).join('');
+        }
+
+        // REMOVE FLAVOR
+        function removeFlavor(flavorName) {
+            selectedFlavors = selectedFlavors.filter(f => f !== flavorName);
+            const flavors = { '5k': flavors5k, '9k': flavors9k, '12k': flavors12k, '15k': flavors15k }[selectedCartridge];
+            const index = flavors.findIndex(f => f.name === flavorName);
+            if (index !== -1) {
+                document.getElementById(`flavor-${index}`).classList.remove('selected');
+            }
+            updateSelectedCount();
+            updateSelectedFlavorsDisplay();
+            updatePriceDisplay();
+        }
+
+        // ADD TO CART
+        function addToCart() {
+            if (selectedFlavors.length === 0) {
+                alert('Por favor, selecciona al menos un sabor');
+                return;
+            }
+            
+            const pricing = PRICING[selectedCartridge];
+            const total = calculateTotal();
+            const additionalFlavors = Math.max(0, selectedFlavors.length - 1);
+            const additionalCost = additionalFlavors * pricing.additional;
+            
+            const cartItem = {
+                id: Date.now(),
+                product: 'STLTH',
+                cartridge: `${PUFFS[selectedCartridge]} Puffs`,
+                flavors: [...selectedFlavors],
+                basePrice: pricing.base,
+                additionalPrice: pricing.additional,
+                additionalFlavors: additionalFlavors,
+                additionalCost: additionalCost,
+                total: total
+            };
+            
+            cart.push(cartItem);
+            updateCartCount();
+            
+            selectedFlavors = [];
+            document.querySelectorAll('.flavor-item').forEach(item => item.classList.remove('selected'));
+            updateSelectedCount();
+            updateSelectedFlavorsDisplay();
+            updatePriceDisplay();
+            
+            alert(`✅ STLTH añadido al carrito\nTotal: S/.${total.toFixed(2)}`);
+        }
+
+        // UPDATE CART COUNT
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+
+        // TOGGLE CART MODAL
+        function toggleCart() {
+            const modal = document.getElementById('cartModal');
+            modal.classList.toggle('active');
+            renderCart();
+        }
+
+        // RENDER CART
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            const cartActions = document.getElementById('cartActions');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart">Tu carrito está vacío</div>';
+                cartTotal.style.display = 'none';
+                cartActions.style.display = 'none';
+                return;
+            }
+            
+            cartItems.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <div class="cart-item-name">${item.product} (${item.cartridge})</div>
+                    <div class="cart-item-flavors"><strong>Sabores:</strong> ${item.flavors.join(', ')}</div>
+                    <div class="cart-item-breakdown">Base (1 sabor): S/.${item.basePrice.toFixed(2)}${item.additionalFlavors > 0 ? ` | +${item.additionalFlavors} adicionales × S/.${item.additionalPrice.toFixed(2)}: S/.${item.additionalCost.toFixed(2)}` : ''}</div>
+                    <div class="cart-item-price">Total: S/.${item.total.toFixed(2)}</div>
+                    <button onclick="removeFromCart(${index})" style="margin-top: 0.5rem; background: #ff4444; color: white; border: none; padding: 0.4rem 1rem; border-radius: 5px; cursor: pointer; font-weight: 600;">Eliminar</button>
+                </div>
+            `).join('');
+            
+            const total = cart.reduce((sum, item) => sum + item.total, 0);
+            cartTotal.textContent = `Total: S/.${total.toFixed(2)}`;
+            cartTotal.style.display = 'block';
+            cartActions.style.display = 'flex';
+        }
+
+        // REMOVE FROM CART
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartCount();
+            renderCart();
+        }
+
+        // CLEAR CART
+        function clearCart() {
+            if(confirm('¿Estás seguro de vaciar el carrito?')) {
+                cart = [];
+                updateCartCount();
+                renderCart();
+            }
+        }
+
+        // CHECKOUT WHATSAPP
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                alert('Tu carrito está vacío');
+                return;
+            }
+            
+            let message = '🛒 *PEDIDO - LUXURY VAPE COLLECTION*\n\n';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                message += `*${index + 1}. ${item.product} (${item.cartridge})*\n`;
+                message += `   Sabores: ${item.flavors.join(', ')}\n`;
+                message += `   Base (1 sabor incluido): S/.${item.basePrice.toFixed(2)}\n`;
+                if (item.additionalFlavors > 0) {
+                    message += `   +${item.additionalFlavors} sabores adicionales × S/.${item.additionalPrice.toFixed(2)}: S/.${item.additionalCost.toFixed(2)}\n`;
+                }
+                message += `   *Subtotal: S/.${item.total.toFixed(2)}*\n\n`;
+                total += item.total;
+            });
+            
+            message += `━━━━━━━━━━━━━━━━\n`;
+            message += `*TOTAL GENERAL: S/.${total.toFixed(2)}*\n\n`;
+            message += '📋 *Datos del cliente:*\n';
+            message += 'Nombre: \n';
+            message += 'Dirección: \n';
+            message += 'Teléfono: \n';
+            
+            const phone = '51999999999';
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // CONSULT WHATSAPP
+        function consultWhatsApp() {
+            if (selectedFlavors.length === 0) {
+                alert('Por favor, selecciona al menos un sabor');
+                return;
+            }
+            
+            const pricing = PRICING[selectedCartridge];
+            const total = calculateTotal();
+            const additionalFlavors = Math.max(0, selectedFlavors.length - 1);
+            const additionalCost = additionalFlavors * pricing.additional;
+            
+            let message = '👋 *CONSULTA - STLTH*\n\n';
+            message += `Me interesa el STLTH (${PUFFS[selectedCartridge]} Puffs) con los siguientes sabores:\n\n`;
+            selectedFlavors.forEach((flavor, index) => {
+                message += `${index + 1}. ${flavor}\n`;
+            });
+            message += `\n━━━━━━━━━━━━━━━━\n`;
+            message += `💰 *Desglose del precio:*\n`;
+            message += `Base (1 sabor incluido): S/.${pricing.base.toFixed(2)}\n`;
+            if (additionalFlavors > 0) {
+                message += `${additionalFlavors} sabores adicionales × S/.${pricing.additional.toFixed(2)}: S/.${additionalCost.toFixed(2)}\n`;
+            }
+            message += `\n*TOTAL: S/.${total.toFixed(2)}*\n\n`;
+            message += '¿Me puede brindar más información?';
+            
+            const phone = '51999999999';
+            const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        document.getElementById('cartModal').addEventListener('click', function(e) {
+            if (e.target === this) toggleCart();
         });
+
+        // Initialize
+        renderFlavors();
+        updatePriceDisplay();
     </script>
 </body>
 </html>
